@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Hushpuppies</string>
+    <string name="command_1">Command 1</string>
+    <string name="command_2">Command 2</string>
+    <string name="command_3">Command 3</string>
+    <string name="command_4">Command 4</string>
+    <string name="command_5">Command 5</string>
+    <string name="connect_to_bluetooth_device">Connect to Bluetooth Device</string>
+</resources>
