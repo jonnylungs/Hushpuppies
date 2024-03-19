@@ -1,4 +1,7 @@
 #include "command_frequencies.h"
+#include <SoftwareSerial.h>
+
+SoftwareSerial HM10(2,3);
 char Incoming_value = "";
 
 enum {commandWaiting, commandPlay, commandConfirm, cameraMode};
@@ -7,18 +10,22 @@ unsigned char commandState;
 void setup()
 {
   Serial.begin(9600);
+  HM10.begin(9600);
   commandState = 0;
-  pinMode(A3, INPUT);
   pinMode(8, OUTPUT);
 }
 
 void loop() {
     switch (commandState) {
       case commandWaiting:
-      Serial.println("Waiting for Command");
       
-      if (Serial.available() > 0) {
-        Incoming_value = Serial.read();
+      if (HM10.available()) {
+        Incoming_value = HM10.read();
+
+        if (Incoming_value == '\0'){
+          break;
+        }
+
         commandState = commandPlay;
         break;
       }
@@ -47,8 +54,9 @@ void loop() {
 }
 
 void playCommand(char command_name) {
-    if(command_name == "sit")
+    if(command_name == '1')
     {
+      Serial.println("Running Sit!");
       for (int i = 0; i < 3; i++)
       {
         tone(8, sit[i], sit[3]);
@@ -56,15 +64,7 @@ void playCommand(char command_name) {
       }
     }
       
-    else if(command_name == "stay") {
-      for (int i = 0; i < 3; i++)
-      {
-        tone(8, stay[i], stay[3]);
-        delay(stay[3]);
-      }
-    }
-
-    else if(command_name == "down") {
+    else if(command_name == '2') {
       for (int i = 0; i < 3; i++)
       {
         tone(8, down[i], down[3]);
@@ -72,7 +72,23 @@ void playCommand(char command_name) {
       }
     }
 
-    else if(command_name == "left") {
+    else if(command_name == '3') {
+      for (int i = 0; i < 3; i++)
+      {
+        tone(8, stay[i], stay[3]);
+        delay(stay[3]);
+      }
+    }
+
+    else if(command_name == '4') {
+      for (int i = 0; i < 3; i++)
+      {
+        tone(8, forward[i], forward[3]);
+        delay(forward[3]);
+      }
+    }
+
+    else if(command_name == '5') {
       for (int i = 0; i < 3; i++)
       {
         tone(8, left[i], left[3]);
@@ -80,19 +96,11 @@ void playCommand(char command_name) {
       }
     }
 
-    else if(command_name == "right") {
+    else if(command_name == '6') {
       for (int i = 0; i < 3; i++)
       {
         tone(8, right[i], right[3]);
         delay(right[3]);
-      }
-    }
-
-    else if(command_name == "left") {
-      for (int i = 0; i < 3; i++)
-      {
-        tone(8, left[i], left[3]);
-        delay(left[3]);
       }
     }
 }
